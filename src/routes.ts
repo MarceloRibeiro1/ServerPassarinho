@@ -149,8 +149,27 @@ routes.post("/tweet", authMiddleware, async (req, res) => {
 
 routes.get("/feed", async (req, res) => {
 	const recentFeed = new TweetPostsHandler();
+	const tweetIndex = parseInt(req.query.tweetIndex as string);
 
-	const feedRecentPosts = await recentFeed.GetRecentFeedPosts();
+	const feedRecentPosts = await recentFeed.GetRecentFeedPosts(tweetIndex);
+
+	const feedRecentPostsList: TweetPostInfo[] = await Promise.all(
+		feedRecentPosts.map(async (tweet) => {
+			const getTweet = await recentFeed.GetPostAuthorInfo(tweet);
+			return getTweet;
+		})
+	);
+
+	res.status(200).send({ recentPosts: feedRecentPostsList });
+});
+routes.get("/feednew", async (req, res) => {
+	const recentFeed = new TweetPostsHandler();
+	const tweetIndex = parseInt(req.query.tweetIndex as string);
+
+	const latest = (await recentFeed.GetNewestFeedPost()) as Post;
+	const feedRecentPosts = await recentFeed.GetNewFeedPosts(
+		latest.id - tweetIndex
+	);
 
 	const feedRecentPostsList: TweetPostInfo[] = await Promise.all(
 		feedRecentPosts.map(async (tweet) => {
@@ -176,7 +195,7 @@ routes.get("/getlike", async (req, res) => {
 			postId
 		)) as likedPostsObjetct;
 		if (result.likedPosts.length)
-			return res.status(200).send({ liked: true, likesNumber });
+			return res.status(200).send({ liked: true, likes });
 		res.status(200).send({ liked: false, likes });
 	} else {
 		throw new AppError("Faild to get likes");

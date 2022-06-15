@@ -3,6 +3,8 @@ import { CreatePrismaPosts } from "../../adapters/prisma/CreatePosts";
 import {
 	GetPrismaCommentNumber,
 	GetPrismaLikeNumber,
+	GetPrismaNewestFeedPost,
+	GetPrismaNewFeedPosts,
 	GetPrismaPost,
 	GetPrismaRecentFeedPosts,
 	GetPrismaRecentFeedPostsResponse,
@@ -27,10 +29,21 @@ export class TweetPostsHandler {
 		return createPrismaPost.executeResponse(post);
 	}
 
-	async GetRecentFeedPosts() {
+	async GetRecentFeedPosts(index: number) {
 		const getPrismaRecentFeedPosts = new GetPrismaRecentFeedPosts();
 
-		return getPrismaRecentFeedPosts.execute();
+		return getPrismaRecentFeedPosts.execute(index);
+	}
+
+	async GetNewestFeedPost() {
+		const getPrismaNewestFeedPost = new GetPrismaNewestFeedPost();
+
+		return getPrismaNewestFeedPost.execute();
+	}
+	async GetNewFeedPosts(number: number) {
+		const getPrismaNewFeedPosts = new GetPrismaNewFeedPosts();
+
+		return getPrismaNewFeedPosts.execute(number);
 	}
 
 	async GetPostAuthorInfo(post: Post) {

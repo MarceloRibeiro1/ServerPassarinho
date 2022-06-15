@@ -1,12 +1,32 @@
 import { prisma } from "../../prisma";
 
 export class GetPrismaRecentFeedPosts {
-	async execute() {
+	async execute(index: number) {
 		return await prisma.post.findMany({
 			orderBy: {
 				createdAt: "desc",
 			},
 			take: 20,
+			skip: index,
+		});
+	}
+}
+export class GetPrismaNewestFeedPost {
+	async execute() {
+		return await prisma.post.findFirst({
+			orderBy: {
+				createdAt: "desc",
+			},
+		});
+	}
+}
+export class GetPrismaNewFeedPosts {
+	async execute(number: number) {
+		return await prisma.post.findMany({
+			orderBy: {
+				createdAt: "desc",
+			},
+			take: number,
 		});
 	}
 }
@@ -19,7 +39,6 @@ export class GetPrismaRecentFeedPostsResponse {
 			orderBy: {
 				createdAt: "desc",
 			},
-			take: 20,
 		});
 	}
 }

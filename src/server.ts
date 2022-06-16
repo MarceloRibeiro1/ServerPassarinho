@@ -24,9 +24,11 @@ app.use(errorMiddleware);
 
 const httpserver = http.createServer(app);
 
+const URL = process.env.BASE_URL;
+
 const io = new Server(httpserver, {
 	cors: {
-		origin: "http://localhost:3000",
+		origin: URL,
 	},
 });
 

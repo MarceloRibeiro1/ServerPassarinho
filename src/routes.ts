@@ -246,5 +246,5 @@ routes.get("/tweetdialog", async (req, res) => {
 routes.get("/commentnumber", async (req, res) => {
 	const count = new GetPrismaCommentNumber();
 	const result = await count.execute(parseInt(req.query.id as string));
-	res.status(200).send(result?._count.comment);
+	res.status(200).send(result);
 });

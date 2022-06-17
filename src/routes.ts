@@ -106,6 +106,7 @@ routes.post("/login", async (req, res) => {
 		userAccountId: userAccount.id,
 		userProfileId: userProfile.id,
 		username: userAccount.username,
+		userPhoto: userProfile.photo,
 	});
 });
 

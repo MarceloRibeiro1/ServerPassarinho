@@ -11,6 +11,7 @@ import { AppError } from "./errors/AppErrors";
 import { routes } from "./routes";
 import { validateEnv } from "./services/utils/validateEnv";
 import { Server } from "socket.io";
+import { GetPrismaCommentNumber } from "./adapters/prisma/GetPosts";
 var cookieParser = require("cookie-parser");
 
 validateEnv();
@@ -34,6 +35,10 @@ const io = new Server(httpserver, {
 
 io.on("connection", (socket) => {
 	socket.on("new_post", () => {
+		socket.emit("new_tweet");
+	});
+	socket.on("new_comment", async (data) => {
+		socket.emit(`new_comment_${data.responseId}`);
 		socket.emit("new_tweet");
 	});
 });
